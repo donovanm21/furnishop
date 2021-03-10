@@ -1,0 +1,13 @@
+.icon {
+    border: 2px solid white;
+    border-radius: 50%;
+}
+.header-color {
+    background-color: #473c2e;
+}
+.hr-brown {
+    border: 4px solid #473c2e;
+    width: 10%;
+    border-radius: 5px;
+    margin: auto;
+}
