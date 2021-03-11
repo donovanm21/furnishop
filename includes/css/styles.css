@@ -11,3 +11,6 @@
     border-radius: 5px;
     margin: auto;
 }
+.cart-link {
+    text-decoration: none;
+}
