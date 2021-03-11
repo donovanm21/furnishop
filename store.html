@@ -8,9 +8,10 @@
     <link href="includes/css/styles.css" rel="stylesheet">
     <!-- Bootstrap core CSS -->
     <link href="includes/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/vue@3.0.2"></script>
 </head>
 <body>
-    <main>
+    <main id="app">
         <!-- Nav Bar -->
         <div class="container header-color">
             <nav class="navbar navbar-expand-lg navbar-dark" aria-label="Eleventh navbar example">
@@ -37,10 +38,10 @@
                             <a class="nav-link" href="contact.html">Contact</a>
                         </li>
                     </ul>
-                    <a class="text-decoration-none" href="checkout.html">
-                        <span class="font-weight-bold text-white px-2">0 Items</span>
-                    </a>
-                    <img src="includes/img/shopping-cart.png" width="30">
+                    <div class="cart-hover" @click="toggleCheckOut">
+                        <span class="font-weight-bold text-white px-2">{{cartItems()}} Items in </span>
+                        <img src="includes/img/shopping-cart.png" width="30">
+                    </div>
                     </div>
                 </div>
             </nav>
@@ -53,92 +54,205 @@
                 </div>
             </div>
         </section>
-        <div class="container">
-            <!-- Chairs -->
+        <div class="container" v-if="!checkout">
             <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
-                <!-- Product 1 -->
-                <div class="">
+                <!-- Products -->
+                <div v-for="product in products" class="">
                     <div class="card mb-4 shadow-sm">
                         <div class="card-body">
-                            <img src="includes/img/store_pics/chair1.jpg" width="250">
-                            <p class="pt-3">DIDIER FABRIC DINING CHAIR</p>
-                            <h3 class="py-2">R 1499</h3>
+                            <img :src="product.image" :alt="product.title" width="250">
+                            <p class="pt-3">{{product.title}}</p>
+                            <h3 class="py-2">R {{product.price}}</h3>
                         </div>
                         <div class="card-footer">
-                            <button type="button" class="w-100 btn btn-lg btn-outline-primary">Add to Cart</button>
-                        </div>
-                    </div>
-                </div>
-                <!-- Product 2 -->
-                <div class="">
-                    <div class="card mb-4 shadow-sm">
-                        <div class="card-body">
-                            <img src="includes/img/store_pics/chair2.jpg" width="250">
-                            <p class="pt-3">JADE WHITEWASH DINING CHAIR</p>
-                            <h3 class="py-2">R 999</h3>
-                        </div>
-                        <div class="card-footer">
-                            <button type="button" class="w-100 btn btn-lg btn-outline-primary">Add to Cart</button>
-                        </div>
-                    </div>
-                </div>
-                <!-- Product 3 -->
-                <div class="">
-                    <div class="card mb-4 shadow-sm">
-                        <div class="card-body">
-                            <img src="includes/img/store_pics/chair3.jpg" width="250">
-                            <p class="pt-3">FINA FABRIC DINING CHAIR</p>
-                            <h3 class="py-2">R 659</h3>
-                        </div>
-                        <div class="card-footer">
-                            <button type="button" class="w-100 btn btn-lg btn-outline-primary">Add to Cart</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Cupboards -->
-            <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
-                <!-- Product 1 -->
-                <div class="">
-                    <div class="card mb-4 shadow-sm">
-                        <div class="card-body">
-                            <img src="includes/img/store_pics/cupboard1.jpg" width="250">
-                            <p class="pt-3">TITAN 3 DOOR 3 DRAWER UNIT</p>
-                            <h3 class="py-2">R 2899</h3>
-                        </div>
-                        <div class="card-footer">
-                            <button type="button" class="w-100 btn btn-lg btn-outline-primary">Add to Cart</button>
-                        </div>
-                    </div>
-                </div>
-                <!-- Product 2 -->
-                <div class="">
-                    <div class="card mb-4 shadow-sm">
-                        <div class="card-body">
-                            <img src="includes/img/store_pics/cupboard2.jpg" width="250">
-                            <p class="pt-3">TITAN 2 DOOR 2 DRAWER UNIT</p>
-                            <h3 class="py-2">R 1949</h3>
-                        </div>
-                        <div class="card-footer">
-                            <button type="button" class="w-100 btn btn-lg btn-outline-primary">Add to Cart</button>
-                        </div>
-                    </div>
-                </div>
-                <!-- Product 3 -->
-                <div class="">
-                    <div class="card mb-4 shadow-sm">
-                        <div class="card-body">
-                            <img src="includes/img/store_pics/cupboard3.jpg" width="250">
-                            <p class="pt-3">TITAN 2 DOOR UNIT</p>
-                            <h3 class="py-2">R 1799</h3>
-                        </div>
-                        <div class="card-footer">
-                            <button type="button" class="w-100 btn btn-lg btn-outline-primary">Add to Cart</button>
+                            <button type="button" class="mx-2 btn btn-md btn-outline-primary" style="width: 45%;" @click="addToCart(product)">Buy</button>
+                            <button type="button" class="btn btn-md btn-outline-primary" style="width: 45%;" v-if="cartTotal() !== 0" @click="toggleCheckOut">Checkout</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- Checkout Page -->
+        <div class="container" v-if="checkout">
+            <hr class="my-4">
+            <div class="row g-3 mt-2">
+              <div class="col-md-5 col-lg-4 order-md-last">
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                  <span class="text-muted">Your cart</span>
+                  <span class="badge bg-secondary rounded-pill">{{cartItems()}}</span>
+                </h4>
+                <ul class="list-group mb-3">
+                  <li class="list-group-item d-flex lh-sm" v-for="item in cart">
+                    <img class="flex-shrink-1" src="includes/img/remove.png" width="24" height="24" @click="removeItem(item)">
+                    <div>
+                      <h6 class="my-0 px-3">{{item.title}}</h6>
+                      <small class="text-muted px-3">{{item.description}}</small>
+                    </div>
+                    <span class="text-muted ms-auto">R{{item.price}}</span>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between">
+                    <span>Total (ZAR)</span>
+                    <strong>R{{cartTotal()}}</strong>
+                  </li>
+                </ul>
+        
+                <button class="w-100 btn btn-primary btn-lg" type="button" @click="toggleCheckOut">Back to Store</button>
+              </div>
+              <div class="col-md-7 col-lg-8">
+                <h4 class="mb-3">Billing address</h4>
+                <form class="needs-validation" novalidate>
+                  <div class="row g-3">
+                    <div class="col-sm-6">
+                      <label for="firstName" class="form-label">First name</label>
+                      <input type="text" class="form-control" id="firstName" placeholder="" value="" required>
+                      <div class="invalid-feedback">
+                        Valid first name is required.
+                      </div>
+                    </div>
+        
+                    <div class="col-sm-6">
+                      <label for="lastName" class="form-label">Last name</label>
+                      <input type="text" class="form-control" id="lastName" placeholder="" value="" required>
+                      <div class="invalid-feedback">
+                        Valid last name is required.
+                      </div>
+                    </div>
+        
+                    <div class="col-12">
+                      <label for="username" class="form-label">Username</label>
+                      <div class="input-group has-validation">
+                        <span class="input-group-text">@</span>
+                        <input type="text" class="form-control" id="username" placeholder="Username" required>
+                      <div class="invalid-feedback">
+                          Your username is required.
+                        </div>
+                      </div>
+                    </div>
+        
+                    <div class="col-12">
+                      <label for="email" class="form-label">Email <span class="text-muted">(Optional)</span></label>
+                      <input type="email" class="form-control" id="email" placeholder="you@example.com">
+                      <div class="invalid-feedback">
+                        Please enter a valid email address for shipping updates.
+                      </div>
+                    </div>
+        
+                    <div class="col-12">
+                      <label for="address" class="form-label">Address</label>
+                      <input type="text" class="form-control" id="address" placeholder="1234 Main St" required>
+                      <div class="invalid-feedback">
+                        Please enter your shipping address.
+                      </div>
+                    </div>
+        
+                    <div class="col-12">
+                      <label for="address2" class="form-label">Address 2 <span class="text-muted">(Optional)</span></label>
+                      <input type="text" class="form-control" id="address2" placeholder="Apartment or suite">
+                    </div>
+        
+                    <div class="col-md-5">
+                      <label for="country" class="form-label">Country</label>
+                      <select class="form-select" id="country" required>
+                        <option value="">Choose...</option>
+                        <option>United States</option>
+                      </select>
+                      <div class="invalid-feedback">
+                        Please select a valid country.
+                      </div>
+                    </div>
+        
+                    <div class="col-md-4">
+                      <label for="state" class="form-label">State</label>
+                      <select class="form-select" id="state" required>
+                        <option value="">Choose...</option>
+                        <option>California</option>
+                      </select>
+                      <div class="invalid-feedback">
+                        Please provide a valid state.
+                      </div>
+                    </div>
+        
+                    <div class="col-md-3">
+                      <label for="zip" class="form-label">Zip</label>
+                      <input type="text" class="form-control" id="zip" placeholder="" required>
+                      <div class="invalid-feedback">
+                        Zip code required.
+                      </div>
+                    </div>
+                  </div>
+        
+                  <hr class="my-4">
+        
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="same-address">
+                    <label class="form-check-label" for="same-address">Shipping address is the same as my billing address</label>
+                  </div>
+        
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="save-info">
+                    <label class="form-check-label" for="save-info">Save this information for next time</label>
+                  </div>
+        
+                  <hr class="my-4">
+        
+                  <h4 class="mb-3">Payment</h4>
+        
+                  <div class="my-3">
+                    <div class="form-check">
+                      <input id="credit" name="paymentMethod" type="radio" class="form-check-input" checked required>
+                      <label class="form-check-label" for="credit">Credit card</label>
+                    </div>
+                    <div class="form-check">
+                      <input id="debit" name="paymentMethod" type="radio" class="form-check-input" required>
+                      <label class="form-check-label" for="debit">Debit card</label>
+                    </div>
+                    <div class="form-check">
+                      <input id="paypal" name="paymentMethod" type="radio" class="form-check-input" required>
+                      <label class="form-check-label" for="paypal">PayPal</label>
+                    </div>
+                  </div>
+        
+                  <div class="row gy-3">
+                    <div class="col-md-6">
+                      <label for="cc-name" class="form-label">Name on card</label>
+                      <input type="text" class="form-control" id="cc-name" placeholder="" required>
+                      <small class="text-muted">Full name as displayed on card</small>
+                      <div class="invalid-feedback">
+                        Name on card is required
+                      </div>
+                    </div>
+        
+                    <div class="col-md-6">
+                      <label for="cc-number" class="form-label">Credit card number</label>
+                      <input type="text" class="form-control" id="cc-number" placeholder="" required>
+                      <div class="invalid-feedback">
+                        Credit card number is required
+                      </div>
+                    </div>
+        
+                    <div class="col-md-3">
+                      <label for="cc-expiration" class="form-label">Expiration</label>
+                      <input type="text" class="form-control" id="cc-expiration" placeholder="" required>
+                      <div class="invalid-feedback">
+                        Expiration date required
+                      </div>
+                    </div>
+        
+                    <div class="col-md-3">
+                      <label for="cc-cvv" class="form-label">CVV</label>
+                      <input type="text" class="form-control" id="cc-cvv" placeholder="" required>
+                      <div class="invalid-feedback">
+                        Security code required
+                      </div>
+                    </div>
+                  </div>
+        
+                  <hr class="my-4">
+        
+                  <button class="w-100 btn btn-primary btn-lg" type="button">Buy Items</button>
+                </form>
+              </div>
+            </div>
     </main>
     <!-- Footer -->
     <footer class="text-muted py-5 bg-light">
@@ -151,9 +265,6 @@
         </div>
     </footer>
     <script src="includes/js/bootstrap.bundle.min.js"></script>
-    <script src="includes/js/scripts.js"></script>
-    <script>
-        appInit();
-    </script>
+    <script src="includes/js/vue.js"></script>
 </body>
 </html>

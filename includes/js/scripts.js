@@ -25,7 +25,7 @@ JSON_F7. Last app update
 
 // Template for initializing the application on first load and load some example content.
 
-todoData = {
+appData = {
     id : "",
     user : "",
     category : {
@@ -38,33 +38,27 @@ todoData = {
         p2 : "Medium",
         p3 : "Low"
     },
-    todo_data : {
-        task0 : {
-            title : "Example 1",
-            description : "Description for task 1",
-            date_due : "2021-03-10",
-            time_due : "10:00",
-            priority : "Medium",
-            tags : ["General"],
-            completed : false
+    products : {
+        product0 : {
+            title : "DIDIER FABRIC DINING CHAIR",
+            image : "Description for task 1",
+            price : 1499,
+            available : true,
+            incart : false
         },
-        task1 : {
-            title : "Example 2",
-            description : "Description for task 2",
-            date_due : "2021-03-10",
-            time_due : "10:00",
-            priority : "High",
-            tags : ["Work"],
-            completed : false
+        product1 : {
+            title : "JADE WHITEWASH DINING CHAIR",
+            image : "Description for task 1",
+            price : 999,
+            available : true,
+            incart : false
         },
-        task2 : {
-            title : "Example 3",
-            description : "Description for task 3",
-            date_due : "2021-03-10",
-            time_due : "10:00",
-            priority : "Low",
-            tags : ["Home", "General"],
-            completed : false
+        product2 : {
+            title : "FINA FABRIC DINING CHAIR",
+            image : "Description for task 1",
+            price : 659,
+            available : true,
+            incart : false
         }
     },
     last_update : ""
