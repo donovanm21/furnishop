@@ -39,6 +39,9 @@ const app = Vue.createApp({
         },
         toggleCheckOut(){
             this.checkout = !this.checkout
+        },
+        buyItems(){
+            this.cart = []
         }
     },
     computed: {
