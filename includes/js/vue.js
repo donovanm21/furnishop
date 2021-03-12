@@ -81,6 +81,10 @@ const app = new Vue({
                 const parseCheckout = JSON.stringify(this.checkout)
                 localStorage.setItem('checkout', parseCheckout)
                 this.errors = []
+                this.ccname = null
+                this.ccnumber = null
+                this.ccexpiration = null
+                this.cccvv = null
                 return true;
               }
         

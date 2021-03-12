@@ -103,9 +103,9 @@
                 <h4 class="mb-3">Billing address</h4>
                 <form class="needs-validation" @submit="checkForm" method="post" novalidate>
                         <p v-if="errors.length">
-                            <b>Please correct the following error(s):</b>
+                            <b class="text-danger">Please correct the following error(s):</b>
                             <ul>
-                                <li v-for="error in errors">{{ error }}</li>
+                                <li class="text-danger" v-for="error in errors">{{ error }}</li>
                             </ul>
                         </p>
                         <div class="row g-3">
