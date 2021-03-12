@@ -30,24 +30,24 @@ const app = new Vue({
     mounted() {
         if (localStorage.getItem('cart')) {
             try {
-                this.cart = JSON.parse(localStorage.getItem('cart'));
+                this.cart = JSON.parse(localStorage.getItem('cart'))
             } catch(e) {
-                localStorage.removeItem('cart');
+                localStorage.removeItem('cart')
             }
         }
         if (localStorage.getItem('checkout')) {
             try {
-                this.checkout = JSON.parse(localStorage.getItem('checkout'));
+                this.checkout = JSON.parse(localStorage.getItem('checkout'))
             } catch(e) {
-                localStorage.removeItem('checkout');
+                localStorage.removeItem('checkout')
             }
         }
     },
     methods: {
         addToCart(product){
             this.cart.push(product)
-            const parseCart = JSON.stringify(this.cart);
-            localStorage.setItem('cart', parseCart);
+            const parseCart = JSON.stringify(this.cart)
+            localStorage.setItem('cart', parseCart)
         },
         cartItems(){
             return this.cart.length
@@ -63,56 +63,58 @@ const app = new Vue({
         },
         removeItem(item){
             this.cart.pop(item)
-            const parseCart = JSON.stringify(this.cart);
-            localStorage.setItem('cart', parseCart);
+            const parseCart = JSON.stringify(this.cart)
+            localStorage.setItem('cart', parseCart)
         },
         toggleCheckOut(){
             this.checkout = !this.checkout
-            const parseCheckout = JSON.stringify(this.checkout);
-            localStorage.setItem('checkout', parseCheckout);
+            const parseCheckout = JSON.stringify(this.checkout)
+            localStorage.setItem('checkout', parseCheckout)
+            this.errors = []
         },
         checkForm: function (e) {
             if (this.firstname && this.lastname && this.email && this.address && this.zip && this.ccname && this.ccnumber && this.ccexpiration && this.cccvv) {
                 this.cart = []
-                const parseCart = JSON.stringify(this.cart);
-                localStorage.setItem('cart', parseCart);
+                const parseCart = JSON.stringify(this.cart)
+                localStorage.setItem('cart', parseCart)
                 this.checkout = !this.checkout
-                const parseCheckout = JSON.stringify(this.checkout);
-                localStorage.setItem('checkout', parseCheckout);
+                const parseCheckout = JSON.stringify(this.checkout)
+                localStorage.setItem('checkout', parseCheckout)
+                this.errors = []
                 return true;
               }
         
-              this.errors = [];
+              this.errors = []
         
               if (!this.firstname) {
-                this.errors.push('Valid first name is required.');
+                this.errors.push('Valid first name is required.')
               }
               if (!this.lastname) {
-                this.errors.push('Valid last name is required.');
+                this.errors.push('Valid last name is required.')
               }
               if (!this.email) {
-                this.errors.push('Please enter a valid email address for shipping updates.');
+                this.errors.push('Please enter a valid email address for shipping updates.')
               }
               if (!this.address) {
-                this.errors.push('Please enter your shipping address.');
+                this.errors.push('Please enter your shipping address.')
               }
               if (!this.zip) {
-                this.errors.push('Zip code required.');
+                this.errors.push('Zip code required.')
               }
               if (!this.ccname) {
-                this.errors.push('Name on card is required.');
+                this.errors.push('Name on card is required.')
               }
               if (!this.ccnumber) {
-                this.errors.push('Credit card number is required');
+                this.errors.push('Credit card number is required')
               }
               if (!this.ccexpiration) {
-                this.errors.push('Expiration date required');
+                this.errors.push('Expiration date required')
               }
               if (!this.cccvv) {
-                this.errors.push('Security code required');
+                this.errors.push('Security code required')
               }
         
-              e.preventDefault();
+              e.preventDefault()
         }
     },
     computed: {
