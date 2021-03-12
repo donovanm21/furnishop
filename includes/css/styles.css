@@ -20,6 +20,11 @@
 }
 .cart-hover {
     cursor: pointer;
+    border: 2px solid white;
+    padding: 5px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 1.2em;
 }
 .header-nav {
     width: 100%;
